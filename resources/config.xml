@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<detector>SURF</detector>
+<descriptor>SURF</descriptor>
+<matcher>BruteForce-L1</matcher>
+<visible>1</visible>
+<mode>0</mode>
+<queryImage>lena.jpg</queryImage>
+<trainImage>lena.jpg</trainImage>
+<knn>2</knn>
+<iterCount>-1</iterCount>
+<filter>
+  <_><filterName>RatioCheck</filterName>
+	<param>0.8</param></_>
+  <_><filterName>KnotCheck</filterName></_>
+</filter>
+</opencv_storage>
