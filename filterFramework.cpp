@@ -7,7 +7,6 @@
 #include <math.h>
 #include <iostream>
 #include "filterFramework.h"
-#include "Options.h"
 #include <iomanip>
 
 using namespace cv;
