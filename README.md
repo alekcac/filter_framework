@@ -58,6 +58,8 @@ Command line arguments
 ./filter_framework -det SURF -desc SURF -matcher BruteForce -verbose 1 -image ../filter_framework/resources/lena.jpg -filter RatioCheck
 ```
 
+Use Space to go to the next iteration, Esc to exit.
+
 Output
 ================
 
