@@ -49,6 +49,34 @@ void HomographyCheck::filter(vector<KeyPoint> queryKeypoints, vector<KeyPoint> t
 	matches = result_matches;
 }
 
+void FundamentalCheck::filter(vector<KeyPoint> queryKeypoints, vector<KeyPoint> trainKeypoints, vector<vector<DMatch> >& matches)
+{
+	vector<vector<DMatch> > result_matches;
+
+	vector<Point2f> srcPoints, dstPoints;
+	for(size_t i = 0; i < matches.size(); i++)
+	{
+		srcPoints.push_back(queryKeypoints[matches[i][0].queryIdx].pt);
+		dstPoints.push_back(trainKeypoints[matches[i][0].trainIdx].pt);
+	}
+
+	Mat inliersMask;
+	Mat fundTr = findFundamentalMat(srcPoints, dstPoints, FM_RANSAC, 1, 0.99, inliersMask);
+
+    Mat transformedPointsMat;
+    perspectiveTransform(Mat(srcPoints), transformedPointsMat, fundTr);
+    vector<Point2f> transformedPoints(transformedPointsMat);
+
+    double distance = 1.0;
+  	for(size_t i = 0; i < matches.size(); i++)
+	{
+		 if(inliersMask.at<uchar>(i))
+			result_matches.push_back(matches[i]);
+	}
+
+	matches = result_matches;
+}
+
 void DistanceCheck::filter(vector<vector<DMatch> >& matches, double dst)
 {
 	vector<vector<DMatch> > result_matches;
