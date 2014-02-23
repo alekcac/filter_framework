@@ -73,5 +73,7 @@ Output of each iteration:
 
 Also it displays two windows with results of matching without filtering:
 ![alt text](resources/initialMatches.png "Initial matches")
+
 and filtered mathes:
+
 ![alt text](resources/filteredMatches.png "Filtered matches")
