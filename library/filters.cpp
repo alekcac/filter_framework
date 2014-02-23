@@ -22,12 +22,39 @@ void KnotCheck::filter(vector<vector<DMatch> >& matches)
 	matches = result_matches;
 }
 
+void HomographyCheck::filter(vector<KeyPoint> queryKeypoints, vector<KeyPoint> trainKeypoints, vector<vector<DMatch> >& matches)
+{
+	vector<vector<DMatch> > result_matches;
+
+	vector<Point2f> srcPoints, dstPoints;
+	for(size_t i = 0; i < matches.size(); i++)
+	{
+		srcPoints.push_back(queryKeypoints[matches[i][0].queryIdx].pt);
+		dstPoints.push_back(trainKeypoints[matches[i][0].trainIdx].pt);
+	}
+
+	Mat homoTr = findHomography(srcPoints, dstPoints, CV_RANSAC);
+
+    Mat transformedPointsMat;
+    perspectiveTransform(Mat(srcPoints), transformedPointsMat, homoTr);
+    vector<Point2f> transformedPoints(transformedPointsMat);
+
+    double distance = 1.0;
+  	for(size_t i = 0; i < srcPoints.size(); i++)
+	{
+		if (norm(dstPoints[i] - transformedPoints[i]) <= distance)
+			result_matches.push_back(matches[i]);
+	}
+
+	matches = result_matches;
+}
+
 void DistanceCheck::filter(vector<vector<DMatch> >& matches, double dst)
 {
 	vector<vector<DMatch> > result_matches;
 	for(size_t i = 0; i < matches.size(); i++)
 	{
-		if(matches[i][0].distance>dst)
+		if(matches[i][0].distance > dst)
 		{
 			result_matches.push_back(matches[i]);
 		}
@@ -52,7 +79,7 @@ void RatioCheck::filter(std::vector<vector<DMatch> >& nmatches, double RatioT=0.
 void NCrossCheck::filter(vector<vector<DMatch> > &queryToTrainNmatches, vector<vector<DMatch> > &trainToQueryNmatches)
 {
 	vector<vector<DMatch> > result_matches;
-	for(size_t i= 0 ; i < queryToTrainNmatches.size(); i++)
+	for(size_t i = 0; i < queryToTrainNmatches.size(); i++)
 	{
 		for(size_t j = 0; j < trainToQueryNmatches[queryToTrainNmatches[i][0].trainIdx].size(); j++)
 		{
@@ -83,7 +110,8 @@ void GeometryCheck::filter(vector<KeyPoint> queryKeypoints, vector<KeyPoint> tra
 	matches=result_matches;
 }
 
-void GeometryCheckAngle::filter(vector<KeyPoint> queryKeypoints,vector<KeyPoint> trainKeypoints,vector<vector<DMatch> >& matches,double distance )
+void GeometryCheckAngle::filter(vector<KeyPoint> queryKeypoints, vector<KeyPoint> trainKeypoints,
+	                            vector<vector<DMatch> >& matches, double distance)
 {
 	vector<vector<DMatch> > result_matches;
 	for(size_t i = 0; i < matches.size(); i++)

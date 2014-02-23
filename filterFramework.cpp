@@ -177,6 +177,10 @@ void FilterFramework::filter(const FilterType& f)
 	{
 		GeometryCheck::filter(queryKeypoints, trainKeypoints, queryToTrainMatches);
 	}
+	else if (!f.filterName.compare("HomographyCheck"))
+	{
+		HomographyCheck::filter(queryKeypoints, trainKeypoints, queryToTrainMatches);
+	}
 	else if (!f.filterName.compare("GeometryCheckAngle"))
 	{
 		GeometryCheckAngle::filter(queryKeypoints, trainKeypoints, queryToTrainMatches, f.param);

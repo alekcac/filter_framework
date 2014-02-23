@@ -11,6 +11,14 @@ class KnotCheck
 		static void filter(std::vector<std::vector<cv::DMatch> > &matches);
 };
 
+class HomographyCheck
+{
+	public:
+		HomographyCheck(){};
+		static void filter(std::vector<cv::KeyPoint> queryKeypoints,
+            std::vector<cv::KeyPoint> trainKeypoints, std::vector<std::vector<cv::DMatch> >& matches);
+};
+
 class NCrossCheck
 {
 	public:
